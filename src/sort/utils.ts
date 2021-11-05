@@ -40,4 +40,8 @@ function swap(inputArr: number[], i: number) {
   inputArr[i + 1] = tmp;
 }
 
-export { setCalculate, swap };
+function timeout(delay: number) {
+  return new Promise((res) => setTimeout(res, delay));
+}
+
+export { setCalculate, swap, timeout };

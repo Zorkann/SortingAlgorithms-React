@@ -16,14 +16,15 @@ const Menu = ({
   return (
     <div>
       <button onClick={onGenerateArrayClick}> Generate Array </button>
-      <label htmlFor="delay">Delay:</label>
       <input
-        id="delay"
-        placeholder="Time in ms"
-        type="number"
-        onChange={onDelayChange}
+        type="range"
+        min="1"
+        max="200"
         value={delay}
+        onChange={onDelayChange}
+        id="delay"
       />
+      <label htmlFor="delay">Delay: {delay}</label>
       <button onClick={onQuickSortCLick}> Quick Sort </button>
       <button onClick={onBubbleSortClick}> Bubble Sort </button>
     </div>

@@ -2,7 +2,7 @@ import { useState, ChangeEvent } from "react";
 import "./styles.css";
 import Menu from "./components/Menu";
 import Columns from "./components/Columns";
-import { useSort } from "./quickSort/useSort";
+import { useSort } from "./sort/useSort";
 
 function generateRandomArray() {
   return new Array(40)
@@ -13,7 +13,7 @@ function generateRandomArray() {
 export default function App() {
   const [array, setArray] = useState<number[]>([]);
   const [delay, setDelay] = useState<number>(1);
-  const { data, start } = useSort({
+  const { data, start, comparisions, sortWith } = useSort({
     array,
     delay
   });
@@ -36,6 +36,9 @@ export default function App() {
 
   return (
     <div className="App">
+      <div>
+        {sortWith} - {comparisions} comparisions
+      </div>
       <Menu
         onGenerateArrayClick={onGenerateArrayClick}
         onQuickSortCLick={onQuickSortCLick}

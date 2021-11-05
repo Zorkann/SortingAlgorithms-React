@@ -4,17 +4,25 @@ import { useQuickSort } from "./useQuickSort";
 
 type UseQuickSort = {
   array: number[];
-  delay?: number;
+  delay: number;
 };
 
-function useSort({ array = [], delay = 1 }: UseQuickSort) {
+function useSort({ array = [], delay }: UseQuickSort) {
   const [sortWith, setSortWith] = useState<string>();
-  const { state: bubbleState, bubbleSort } = useBubbleSort({
+  const {
+    state: bubbleState,
+    bubbleSort,
+    comparisions: bubbleComparisions
+  } = useBubbleSort({
     delay,
     array
   });
 
-  const { state: quickState, quickSort } = useQuickSort({
+  const {
+    state: quickState,
+    quickSort,
+    comparisions: quickComparisions
+  } = useQuickSort({
     delay,
     array
   });
@@ -32,11 +40,21 @@ function useSort({ array = [], delay = 1 }: UseQuickSort) {
   }
 
   if (sortWith === "bubble") {
-    return { start, data: bubbleState };
+    return {
+      start,
+      data: bubbleState,
+      comparisions: bubbleComparisions,
+      sortWith
+    };
   }
 
   if (sortWith === "quick") {
-    return { start, data: quickState };
+    return {
+      start,
+      data: quickState,
+      comparisions: quickComparisions,
+      sortWith
+    };
   }
 
   return {
