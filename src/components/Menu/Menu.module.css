@@ -1,0 +1,15 @@
+@import "../../vars.css";
+
+.menu {
+  display: flex;
+  align-items: center;
+}
+
+.menu > *:not(:last-child) {
+  margin-right: var(--header-paddings);
+}
+
+.delay {
+  display: flex;
+  flex-direction: column;
+}

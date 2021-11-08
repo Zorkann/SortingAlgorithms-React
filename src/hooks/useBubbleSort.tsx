@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { swap, timeout } from "./utils";
+import { swap } from "./utils";
+import { timeout } from "../utils/utils";
 
 export type State = {
   i?: number;

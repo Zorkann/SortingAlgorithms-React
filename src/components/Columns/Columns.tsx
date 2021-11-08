@@ -26,7 +26,7 @@ const Columns = ({ data }: ColumnProps) => {
             [styles.i]: index === i,
             [styles.j]: index === j
           })}
-          style={{ height: `calc(${(element * 100) / maxValue}%)` }}
+          style={{ height: `calc(${((element + 2) * 95) / maxValue}%)` }}
           key={uuidv4()}
         >
           {element}

@@ -1,0 +1,16 @@
+@import "../../vars.css";
+
+.button {
+  padding: 8px 14px;
+  background-color: transparent;
+  color: inherit;
+  box-shadow: var(--primary-box-shadow-color) 0px 1px 5px;
+  border: 1px solid var(--primary-border-color);
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.button:hover {
+  background-color: var(--primary-button-color--hover);
+  cursor: pointer;
+}

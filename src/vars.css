@@ -1,0 +1,6 @@
+:root {
+  --primary-border-color: rgb(25, 71, 255);
+  --primary-button-color--hover: rgba(23, 121, 255, 0.8);
+  --primary-box-shadow-color: rgb(23 121 255);
+  --header-paddings: 20px;
+}

@@ -1,0 +1,10 @@
+@import "../../vars.css";
+
+.header {
+  display: flex;
+  flex-direction: column;
+  padding: var(--header-paddings);
+  border-bottom: 1px solid var(--primary-border-color);
+  box-shadow: var(--primary-box-shadow-color) 0px 1px 10px;
+  margin-bottom: 20px;
+}

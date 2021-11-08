@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { setCalculate, timeout } from "./utils";
+import { timeout } from "../utils/utils";
+import { setCalculate } from "./utils";
 
 export type State = {
   p?: number;

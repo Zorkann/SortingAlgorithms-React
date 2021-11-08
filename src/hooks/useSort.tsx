@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useBubbleSort } from "./useBubbleSort";
 import { useQuickSort } from "./useQuickSort";
 
@@ -8,7 +8,7 @@ type UseQuickSort = {
 };
 
 function useSort({ array = [], delay }: UseQuickSort) {
-  const [sortWith, setSortWith] = useState<string>();
+  const [sortWith, setSortWith] = useState<"bubble" | "quick">();
   const {
     state: bubbleState,
     bubbleSort,
@@ -26,6 +26,10 @@ function useSort({ array = [], delay }: UseQuickSort) {
     delay,
     array
   });
+
+  useEffect(() => {
+    setSortWith(undefined);
+  }, [array]);
 
   async function start(sortWith: "quick" | "bubble") {
     setSortWith(sortWith);
@@ -61,7 +65,8 @@ function useSort({ array = [], delay }: UseQuickSort) {
     start,
     data: {
       arr: array
-    }
+    },
+    comparisions: 0
   };
 }
 

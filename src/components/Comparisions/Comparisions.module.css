@@ -1,0 +1,14 @@
+@import "../../vars.css";
+
+.comparisions {
+  display: flex;
+  align-items: center;
+  text-transform: capitalize;
+  font-size: 26px;
+  padding-bottom: var(--header-paddings);
+}
+
+.comparisions > span {
+  display: block;
+  min-width: 300px;
+}

@@ -2,7 +2,9 @@ import { useState, ChangeEvent } from "react";
 import "./styles.css";
 import Menu from "./components/Menu";
 import Columns from "./components/Columns";
-import { useSort } from "./sort/useSort";
+import Comparisions from "./components/Comparisions";
+import Header from "./components/Header";
+import { useSort } from "./hooks/useSort";
 
 function generateRandomArray() {
   return new Array(40)
@@ -36,16 +38,17 @@ export default function App() {
 
   return (
     <div className="App">
-      <div>
-        {sortWith} - {comparisions} comparisions
-      </div>
-      <Menu
-        onGenerateArrayClick={onGenerateArrayClick}
-        onQuickSortCLick={onQuickSortCLick}
-        onDelayChange={onDelayChange}
-        onBubbleSortClick={onBubbleSortClick}
-        delay={delay}
-      />
+      <Header>
+        <Comparisions sortWith={sortWith} comparisions={comparisions} />
+        <Menu
+          onGenerateArrayClick={onGenerateArrayClick}
+          onQuickSortCLick={onQuickSortCLick}
+          onDelayChange={onDelayChange}
+          onBubbleSortClick={onBubbleSortClick}
+          delay={delay}
+          sortWith={sortWith}
+        />
+      </Header>
       <Columns data={data} />
     </div>
   );
