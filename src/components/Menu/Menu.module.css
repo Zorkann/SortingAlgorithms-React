@@ -2,14 +2,35 @@
 
 .menu {
   display: flex;
+  align-items: flex-start;
+}
+
+.menu > button:first-child {
+  margin-right: 10px;
+  white-space: nowrap;
+}
+
+@media only screen and (max-width: 800px) {
+  .slidersContainer {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+.slidersContainer {
+  display: flex;
   align-items: center;
+  justify-content: center;
 }
 
-.menu > *:not(:last-child) {
-  margin-right: var(--header-paddings);
-}
-
-.delay {
+.slider {
   display: flex;
   flex-direction: column;
+  margin: 0 10px;
+}
+
+.sort {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 10px;
 }

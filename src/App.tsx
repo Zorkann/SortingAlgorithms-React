@@ -6,14 +6,15 @@ import Comparisions from "./components/Comparisions";
 import Header from "./components/Header";
 import { useSort } from "./hooks/useSort";
 
-function generateRandomArray() {
-  return new Array(40)
+function generateRandomArray(arrayLength: number) {
+  return new Array(arrayLength)
     .fill(undefined)
-    .map(() => Math.round(Math.random() * 40));
+    .map(() => Math.round(Math.random() * 100));
 }
 
 export default function App() {
   const [array, setArray] = useState<number[]>([]);
+  const [arrayLength, setArrayLength] = useState<number>(20);
   const [delay, setDelay] = useState<number>(1);
   const { data, start, comparisions, sortWith } = useSort({
     array,
@@ -21,11 +22,15 @@ export default function App() {
   });
 
   const onGenerateArrayClick = () => {
-    setArray(generateRandomArray());
+    setArray(generateRandomArray(arrayLength));
   };
 
   const onDelayChange = (event: ChangeEvent<HTMLInputElement>) => {
     setDelay(Number(event.target.value));
+  };
+
+  const onArrayLengthChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setArrayLength(Number(event.target.value));
   };
 
   const onQuickSortCLick = async () => {
@@ -45,6 +50,8 @@ export default function App() {
           onQuickSortCLick={onQuickSortCLick}
           onDelayChange={onDelayChange}
           onBubbleSortClick={onBubbleSortClick}
+          onArrayLengthChange={onArrayLengthChange}
+          arrayLength={arrayLength}
           delay={delay}
           sortWith={sortWith}
         />

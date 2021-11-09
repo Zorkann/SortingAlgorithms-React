@@ -1,5 +1,15 @@
 :root {
-  --primary-border-color: rgb(25, 71, 255);
+  --primary-color: rgb(25, 71, 255);
+  --columns-color: rgb(128, 128, 128);
+
+  --i-color: var(--primary-color);
+  --j-color: rgb(25, 200, 48);
+  --p-color: rgb(255, 25, 25);
+
+  --j-shadow-color: rgb(23, 250, 48);
+  --p-shadow-color: rgb(253, 75, 25);
+
+  --primary-border-color: var(--primary-color);
   --primary-button-color--hover: rgba(23, 121, 255, 0.8);
   --primary-box-shadow-color: rgb(23 121 255);
   --header-paddings: 20px;

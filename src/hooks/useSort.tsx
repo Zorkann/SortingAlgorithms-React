@@ -32,6 +32,7 @@ function useSort({ array = [], delay }: UseQuickSort) {
   }, [array]);
 
   async function start(sortWith: "quick" | "bubble") {
+    if (!array.length) return;
     setSortWith(sortWith);
 
     if (sortWith === "quick") {

@@ -47,11 +47,11 @@ function useBubbleSort({ delay, array }: UseQuickSort) {
     do {
       checked = false;
       for (let i = 0; i < len; i++) {
+        comparisions.current += 1;
+        await saveStep({ arr: arr, i, j: i + 1 }, id);
         if (arr[i] > arr[i + 1]) {
-          await saveStep({ arr: arr, i, j: i + 1 }, id);
           swap(arr, i);
           await saveStep({ arr: arr, i, j: i + 1 }, id);
-          comparisions.current += 1;
           checked = true;
         }
       }
