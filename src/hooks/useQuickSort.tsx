@@ -15,22 +15,13 @@ type UseQuickSort = {
 };
 
 function useQuickSort({ array, delay }: UseQuickSort) {
-  const [state, setState] = useState<State>({
-    p: undefined,
-    pi: undefined,
-    i: undefined,
-    j: undefined,
-    arr: []
-  });
+  const [state, setState] = useState<State>();
   const ref = useRef(0);
   const comparisions = useRef(0);
 
   useEffect(() => {
     ref.current += 1;
     comparisions.current = 0;
-    setState({
-      arr: array
-    });
   }, [array]);
 
   const saveStep = async (args: State, id: number) => {

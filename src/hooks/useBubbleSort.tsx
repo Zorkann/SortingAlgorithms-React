@@ -4,7 +4,7 @@ import { timeout, setBubbleSort } from "./utils";
 export type State = {
   i?: number;
   j?: number;
-  arr: number[];
+  arr?: number[];
 };
 
 type UseQuickSort = {
@@ -13,18 +13,13 @@ type UseQuickSort = {
 };
 
 function useBubbleSort({ delay, array }: UseQuickSort) {
-  const [state, setState] = useState<State>({
-    arr: []
-  });
+  const [state, setState] = useState<State>();
   const ref = useRef(0);
   const comparisions = useRef(0);
 
   useEffect(() => {
     ref.current += 1;
     comparisions.current = 0;
-    setState({
-      arr: array
-    });
   }, [array]);
 
   const saveStep = async (args: State, comp: number, id: number) => {
@@ -42,7 +37,11 @@ function useBubbleSort({ delay, array }: UseQuickSort) {
     setBubbleSort(array, (args, comp) => saveStep(args, comp, id))();
   }
 
-  return { state, bubbleSort, comparisions: comparisions.current };
+  return {
+    state,
+    bubbleSort,
+    comparisions: comparisions.current
+  };
 }
 
 export { useBubbleSort };
