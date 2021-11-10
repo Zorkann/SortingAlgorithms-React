@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { swap } from "./utils";
-import { timeout } from "../utils/utils";
+import { timeout, setBubbleSort } from "./utils";
 
 export type State = {
   i?: number;
@@ -28,35 +27,19 @@ function useBubbleSort({ delay, array }: UseQuickSort) {
     });
   }, [array]);
 
-  const saveStep = async (args: State, id: number) => {
+  const saveStep = async (args: State, comp: number, id: number) => {
     if (ref.current !== id) {
       comparisions.current = 0;
       return;
     }
+    comparisions.current = comp;
     setState(args);
     await timeout(delay);
   };
 
   async function bubbleSort() {
     const id = (ref.current += 1);
-    comparisions.current = 0;
-
-    const arr = [...array];
-    let len = array.length;
-    let checked;
-    do {
-      checked = false;
-      for (let i = 0; i < len; i++) {
-        comparisions.current += 1;
-        await saveStep({ arr: arr, i, j: i + 1 }, id);
-        if (arr[i] > arr[i + 1]) {
-          swap(arr, i);
-          await saveStep({ arr: arr, i, j: i + 1 }, id);
-          checked = true;
-        }
-      }
-    } while (checked);
-    return arr;
+    setBubbleSort(array, (args, comp) => saveStep(args, comp, id))();
   }
 
   return { state, bubbleSort, comparisions: comparisions.current };

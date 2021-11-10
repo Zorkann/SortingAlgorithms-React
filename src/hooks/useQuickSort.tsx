@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { timeout } from "../utils/utils";
+import { timeout, setCalculate } from "./utils";
 
 export type State = {
   p?: number;
@@ -42,57 +42,6 @@ function useQuickSort({ array, delay }: UseQuickSort) {
     await timeout(delay);
   };
 
-  function setCalculate(
-    arr: number[],
-    i: number,
-    j: number,
-    p: number,
-    pi: number
-  ) {
-    return async function (id: number) {
-      if (i <= j) {
-        if (arr[i] < p) {
-          i++;
-          return { done: false, i, j, arr, pi, p };
-        }
-
-        if (arr[j] > p) {
-          j--;
-          return { done: false, i, j, arr, pi, p };
-        }
-
-        if (i <= j) {
-          const temp = arr[i];
-          arr[i] = arr[j];
-          arr[j] = temp;
-
-          await saveStep({ arr, i, j, p, pi }, id);
-
-          i++;
-          j--;
-
-          if (i - 1 === pi) {
-            pi = j + 1;
-            return { done: false, i, j, arr, pi, p };
-          }
-          if (j + 1 === pi) {
-            pi = i - 1;
-            return { done: false, i, j, arr, pi, p };
-          }
-          return { done: false, i, j, arr, pi, p };
-        }
-      }
-      return {
-        done: true,
-        i,
-        j,
-        arr,
-        pi,
-        p
-      };
-    };
-  }
-
   async function quickSort() {
     const id = (ref.current += 1);
     comparisions.current = 1;
@@ -102,12 +51,7 @@ function useQuickSort({ array, delay }: UseQuickSort) {
       i: number = 0,
       j: number = arr.length - 1
     ) {
-      const pi = Math.floor((i + j) / 2);
-      const p = arr[pi];
-
-      await saveStep({ arr, i, j, pi, p }, id);
-
-      const calculate = setCalculate(arr, i, j, p, pi);
+      const calculate = await setCalculate(arr, i, j, saveStep, id);
 
       async function loop(): Promise<number[] | undefined> {
         const { done, ...rest } = await calculate(id);
