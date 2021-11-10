@@ -1,73 +1,57 @@
-import { useState, useEffect } from "react";
-import { useBubbleSort } from "./useBubbleSort";
-import { useQuickSort } from "./useQuickSort";
+import { useState, useEffect, useRef } from "react";
+import { timeout, startSortWith } from "./utils";
+import { TypeOfSortState, TypesOfSort } from "./types";
+
+type SaveStepHandler = (
+  args: TypeOfSortState,
+  id: number,
+  comparisions: number
+) => Promise<void>;
 
 type UseQuickSort = {
   array: number[];
   delay: number;
 };
 
-function useSort({ array = [], delay }: UseQuickSort) {
-  const [sortWith, setSortWith] = useState<"bubble" | "quick">();
-  const {
-    state: bubbleState,
-    bubbleSort,
-    comparisions: bubbleComparisions
-  } = useBubbleSort({
-    delay,
-    array
-  });
+type State = TypeOfSortState | undefined;
 
-  const {
-    state: quickState,
-    quickSort,
-    comparisions: quickComparisions
-  } = useQuickSort({
-    delay,
-    array
-  });
+function useSort({ array, delay }: UseQuickSort) {
+  const [sortWith, setSortWith] = useState<TypesOfSort>();
+  const [state, setState] = useState<State>();
+  const ref = useRef(0);
+  const arr = state?.arr || array;
+  const comparisionsRef = useRef(0);
 
   useEffect(() => {
+    setState(undefined);
     setSortWith(undefined);
+    ref.current += 1;
+    comparisionsRef.current = 0;
   }, [array]);
 
-  async function start(sortWith: "quick" | "bubble") {
-    if (!array.length) return;
+  const saveStep: SaveStepHandler = async (args, id, comparisions) => {
+    if (ref.current !== id) {
+      return;
+    }
+    comparisionsRef.current = comparisions;
+
+    setState(args);
+    await timeout(delay);
+  };
+
+  async function start(sortWith: TypesOfSort) {
+    const id = (ref.current += 1);
     setSortWith(sortWith);
-
-    if (sortWith === "quick") {
-      await quickSort();
-    }
-
-    if (sortWith === "bubble") {
-      await bubbleSort();
-    }
-  }
-
-  if (sortWith === "bubble") {
-    return {
-      start,
-      data: bubbleState,
-      comparisions: bubbleComparisions,
-      sortWith
-    };
-  }
-
-  if (sortWith === "quick") {
-    return {
-      start,
-      data: quickState,
-      comparisions: quickComparisions,
-      sortWith
-    };
+    startSortWith(array, sortWith, (args, comparisions) =>
+      saveStep(args, id, comparisions)
+    );
   }
 
   return {
     start,
-    data: {
-      arr: array
-    },
-    comparisions: 0
+    data: { ...state, arr },
+    sortWith,
+    comparisions: comparisionsRef.current
   };
 }
 
