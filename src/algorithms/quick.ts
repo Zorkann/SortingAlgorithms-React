@@ -18,53 +18,46 @@ type QuickSortArgs = {
   arr: number[];
 };
 
-async function setCalculate({ arr, i, j, cb }: QuickSortArgs) {
+function setPivot(arr: number[], i: number, j: number) {
   let pi = Math.floor((i + j) / 2);
   let p = arr[pi];
+  return { p, pi };
+}
 
-  await cb({ arr, i, j, pi, p });
+function swap(arr: number[], i: number, j: number) {
+  const temp = arr[i];
+  arr[i] = arr[j];
+  arr[j] = temp;
+}
+
+async function setCalculate({ cb, i, j, arr }: QuickSortArgs) {
+  let { p, pi } = setPivot(arr, i, j);
+  await cb({ i, j, arr, p, pi });
+
+  function swapPivot() {
+    if (i - 1 === pi) {
+      pi = j + 1;
+    } else if (j + 1 === pi) {
+      pi = i - 1;
+    }
+  }
 
   return async function () {
     if (i <= j) {
       if (arr[i] < p) {
         i++;
-        return { done: false, i, j, arr, pi, p };
-      }
-
-      if (arr[j] > p) {
+      } else if (arr[j] > p) {
         j--;
-        return { done: false, i, j, arr, pi, p };
-      }
-
-      if (i <= j) {
-        const temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
-
+      } else if (i <= j) {
+        swap(arr, i, j);
         await cb({ arr, i, j, p, pi });
-
         i++;
         j--;
-
-        if (i - 1 === pi) {
-          pi = j + 1;
-          return { done: false, i, j, arr, pi, p };
-        }
-        if (j + 1 === pi) {
-          pi = i - 1;
-          return { done: false, i, j, arr, pi, p };
-        }
-        return { done: false, i, j, arr, pi, p };
+        swapPivot();
       }
+      return { done: false, i, j, arr, p, pi };
     }
-    return {
-      done: true,
-      i,
-      j,
-      arr,
-      pi,
-      p
-    };
+    return { done: true, i, j, arr, p, pi };
   };
 }
 
