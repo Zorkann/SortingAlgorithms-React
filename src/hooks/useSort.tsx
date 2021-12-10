@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import { timeout, startSortWith } from "./utils";
+import { timeout } from "./utils";
 import { TypeOfSortState, TypesOfSort } from "./types";
+import { startBubbleSort } from "../algorithms/bubble";
+import { startQuickSort } from "../algorithms/quick";
 
 type SaveStepHandler = (
   args: TypeOfSortState,
@@ -42,9 +44,19 @@ function useSort({ array, delay }: UseQuickSort) {
   async function start(sortWith: TypesOfSort) {
     const id = (ref.current += 1);
     setSortWith(sortWith);
-    startSortWith(array, sortWith, (args, comparisions) =>
-      saveStep(args, id, comparisions)
-    );
+
+    const cb = (args, comparisions) => saveStep(args, id, comparisions);
+
+    if (sortWith === "quick") {
+      await startQuickSort({ arr: array, cb });
+    }
+
+    if (sortWith === "bubble") {
+      for (const val of startBubbleSort(array)) {
+        const { comparisions, ...rest } = val;
+        await saveStep(rest, id, comparisions);
+      }
+    }
   }
 
   return {

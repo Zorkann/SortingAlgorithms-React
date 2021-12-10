@@ -4,38 +4,28 @@ export type BubbleSortState = {
   arr: number[];
 };
 
-type SetBubbleSortArgs = {
-  cb: (args: BubbleSortState, comparisions: number) => void;
-  arr: number[];
-};
-
 function swap(inputArr: number[], i: number) {
   let tmp = inputArr[i];
   inputArr[i] = inputArr[i + 1];
   inputArr[i + 1] = tmp;
 }
 
-function startBubbleSort({ arr, cb }: SetBubbleSortArgs) {
-  let comparisions = 0;
-  let checked;
+function* startBubbleSort(arr) {
   const arrCopy = [...arr];
+  let comparisions = 0;
+  let swapped = true;
 
-  async function sort() {
-    do {
-      checked = false;
-      for (let i = 0; i < arrCopy.length; i++) {
-        comparisions += 1;
-        if (arrCopy[i] > arrCopy[i + 1]) {
-          swap(arrCopy, i);
-          await cb({ arr: arrCopy, i, j: i + 1 }, comparisions);
-          checked = true;
-        }
+  do {
+    swapped = false;
+    for (let i = 0; i < arrCopy.length; i++) {
+      yield { arr: [...arrCopy], i, j: i + 1, comparisions };
+      comparisions++;
+      if (arrCopy[i] > arrCopy[i + 1]) {
+        swap(arrCopy, i);
+        swapped = true;
       }
-    } while (checked);
-    return arr;
-  }
-
-  sort();
+    }
+  } while (swapped);
 }
 
 export { startBubbleSort };
