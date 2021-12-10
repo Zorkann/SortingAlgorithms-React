@@ -25,7 +25,6 @@ function startBubbleSort({ arr, cb }: SetBubbleSortArgs) {
       checked = false;
       for (let i = 0; i < arrCopy.length; i++) {
         comparisions += 1;
-        await cb({ arr: arrCopy, i, j: i + 1 }, comparisions);
         if (arrCopy[i] > arrCopy[i + 1]) {
           swap(arrCopy, i);
           await cb({ arr: arrCopy, i, j: i + 1 }, comparisions);

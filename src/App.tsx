@@ -7,9 +7,13 @@ import Header from "./components/Header";
 import { useSort } from "./hooks/useSort";
 
 function generateRandomArray(arrayLength: number) {
-  return new Array(arrayLength)
-    .fill(undefined)
-    .map(() => Math.round(Math.random() * 100));
+  return Array.from(
+    new Set(
+      new Array(arrayLength)
+        .fill(undefined)
+        .map(() => Math.round(Math.random() * 100))
+    )
+  );
 }
 
 export default function App() {

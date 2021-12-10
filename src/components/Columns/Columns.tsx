@@ -1,6 +1,6 @@
-import { v4 as uuidv4 } from "uuid";
 import styles from "./Columns.module.css";
 import classNames from "classnames";
+import { Reorder } from "framer-motion";
 
 type ColumnProps = {
   data: {
@@ -17,22 +17,30 @@ const Columns = ({ data }: ColumnProps) => {
   const maxValue = Math.max(...arr);
 
   return (
-    <div className={styles.columnsContainer}>
+    <Reorder.Group
+      className={styles.columnsContainer}
+      axis="x"
+      values={data.arr}
+      onReorder={() => null}
+    >
       {arr.map((element, index) => (
-        <div
+        <Reorder.Item
+          as="div"
+          dragListener={false}
           className={classNames({
             [styles.column]: true,
             [styles.pivot]: index === pi,
             [styles.i]: index === i,
             [styles.j]: index === j
           })}
+          key={element}
           style={{ height: `calc(${((element + 4) * 95) / maxValue}%)` }}
-          key={uuidv4()}
+          value={element}
         >
-          {element}
-        </div>
+          <div>{element}</div>
+        </Reorder.Item>
       ))}
-    </div>
+    </Reorder.Group>
   );
 };
 
