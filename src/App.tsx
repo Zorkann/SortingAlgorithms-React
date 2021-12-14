@@ -1,29 +1,42 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect, useRef } from "react";
 import "./styles.css";
-import Menu from "./components/Menu";
-import Columns from "./components/Columns";
-import Comparisions from "./components/Comparisions";
-import Header from "./components/Header";
-import { useSort } from "./hooks/useSort";
+import { Menu, Columns, Comparisions, Header } from "./components";
+import { generateRandomArray } from "./utils";
+import { startBubbleSort, BubbleSortState } from "./algorithms/bubble";
+import { startQuickSort, QuickSortState } from "./algorithms/quick";
 
-function generateRandomArray(arrayLength: number) {
-  return Array.from(
-    new Set(
-      new Array(arrayLength)
-        .fill(undefined)
-        .map(() => Math.round(Math.random() * 100))
-    )
-  );
-}
+type TypeOfSortState = BubbleSortState | QuickSortState;
+
+type State = TypeOfSortState | undefined;
 
 export default function App() {
   const [array, setArray] = useState<number[]>([]);
   const [arrayLength, setArrayLength] = useState<number>(20);
+  const [sortWith, setSortWith] = useState<"quick" | "bubble" | undefined>();
   const [delay, setDelay] = useState<number>(1);
-  const { data, start, comparisions, sortWith } = useSort({
-    array,
-    delay
-  });
+  const [data, setData] = useState<State>();
+  const generator = useRef<Generator<TypeOfSortState> | null>(null);
+
+  useEffect(() => {
+    setData(undefined);
+    setSortWith(undefined);
+    generator.current = null;
+  }, [array]);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (generator.current === null) {
+        return clearInterval(id);
+      }
+      const { value, done } = generator.current.next();
+      if (done) return clearInterval(id);
+      setData(value);
+    }, delay);
+
+    return () => {
+      clearInterval(id);
+    };
+  }, [sortWith, delay]);
 
   const onGenerateArrayClick = () => {
     setArray(generateRandomArray(arrayLength));
@@ -38,17 +51,19 @@ export default function App() {
   };
 
   const onQuickSortCLick = async () => {
-    await start("quick");
+    generator.current = startQuickSort([...array], 0, array.length - 1);
+    setSortWith("quick");
   };
 
   const onBubbleSortClick = async () => {
-    await start("bubble");
+    generator.current = startBubbleSort([...array]);
+    setSortWith("bubble");
   };
 
   return (
     <div className="App">
       <Header>
-        <Comparisions sortWith={sortWith} comparisions={comparisions} />
+        <Comparisions sortWith={sortWith} comparisions={0} />
         <Menu
           onGenerateArrayClick={onGenerateArrayClick}
           onQuickSortCLick={onQuickSortCLick}
@@ -60,7 +75,7 @@ export default function App() {
           sortWith={sortWith}
         />
       </Header>
-      <Columns data={data} />
+      <Columns data={{ ...data, arr: data?.arr || array }} />
     </div>
   );
 }

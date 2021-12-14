@@ -30,9 +30,8 @@ function swap(arr: number[], i: number, j: number) {
   arr[j] = temp;
 }
 
-async function setCalculate({ cb, i, j, arr }: QuickSortArgs) {
+function* setCalculate(arr: number[], i: number, j: number) {
   let { p, pi } = setPivot(arr, i, j);
-  await cb({ i, j, arr, p, pi });
 
   function swapPivot() {
     if (i - 1 === pi) {
@@ -42,58 +41,31 @@ async function setCalculate({ cb, i, j, arr }: QuickSortArgs) {
     }
   }
 
-  return async function () {
-    if (i <= j) {
-      if (arr[i] < p) {
-        i++;
-      } else if (arr[j] > p) {
-        j--;
-      } else if (i <= j) {
-        swap(arr, i, j);
-        await cb({ arr, i, j, p, pi });
-        i++;
-        j--;
-        swapPivot();
-      }
-      return { done: false, i, j, arr, p, pi };
+  while (i <= j) {
+    if (arr[i] < p) {
+      i++;
+    } else if (arr[j] > p) {
+      j--;
+    } else if (i <= j) {
+      swap(arr, i, j);
+      i++;
+      j--;
+      swapPivot();
     }
-    return { done: true, i, j, arr, p, pi };
-  };
+    yield { arr, i, j, p, pi };
+  }
+  return { arr, i, j, p, pi };
 }
 
-async function startQuickSort({ arr, cb }: SetQuickSortArgs) {
-  let comparisions = 1;
-
-  const callback = async (args: QuickSortState) => cb(args, comparisions);
-
-  async function sort({ arr, i, j, cb }: QuickSortArgs) {
-    const calculate = await setCalculate({
-      arr,
-      i,
-      j,
-      cb
-    });
-
-    async function loop(): Promise<number[] | undefined> {
-      const { done, ...rest } = await calculate();
-      comparisions += 1;
-      await cb(rest);
-      if (done) {
-        if (i < rest.i - 1) {
-          //more elements on the left side of the pivot
-          await sort({ arr, i, j: rest.i - 1, cb });
-        }
-        if (rest.i < j) {
-          //more elements on the right side of the pivot
-          await sort({ arr, i: rest.i, j, cb });
-        }
-        return arr;
-      }
-      return await loop();
-    }
-    return await loop();
+function* startQuickSort(arr: number[], i: number, j: number) {
+  const result = yield* setCalculate(arr, i, j);
+  if (i < result.i - 1) {
+    yield* startQuickSort(arr, i, result.i - 1);
   }
-  return await sort({ arr: [...arr], i: 0, j: arr.length - 1, cb: callback });
+  if (result.i < j) {
+    yield* startQuickSort(arr, result.i, j);
+  }
+  return result;
 }
 
 export { startQuickSort };
