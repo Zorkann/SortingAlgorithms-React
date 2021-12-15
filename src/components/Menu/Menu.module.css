@@ -3,6 +3,7 @@
 .menu {
   display: flex;
   align-items: flex-start;
+  padding-bottom: var(--header-paddings);
 }
 
 .menu > button:first-child {

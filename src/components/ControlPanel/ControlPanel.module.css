@@ -1,0 +1,6 @@
+@import "../../vars.css";
+
+.controlPanel {
+  display: flex;
+  align-items: center;
+}
