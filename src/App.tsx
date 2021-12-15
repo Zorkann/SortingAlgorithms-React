@@ -7,53 +7,20 @@ import {
   Header,
   ControlPanel
 } from "./components";
-import { generateRandomArray } from "./utils";
 import { startBubbleSort, BubbleSortState } from "./algorithms/bubble";
 import { startQuickSort, QuickSortState } from "./algorithms/quick";
-
-type TypeOfSortState = BubbleSortState | QuickSortState;
-
-type State = TypeOfSortState | undefined;
-
-type ReducerState = {
-  array: number[];
-  arrayLength: number;
-  sortWith: "quick" | "bubble" | undefined;
-  state: "stop" | "play" | "pause" | "end";
-  delay: number;
-  data: TypeOfSortState | undefined;
-};
-
-type ActionType = "GENERATE_ARRAY";
-
-type Action = {
-  type: ActionType;
-  payload: any;
-};
-
-function reducer(state: ReducerState, action: Action): ReducerState {
-  switch (action.type) {
-    case "GENERATE_ARRAY":
-      return {
-        ...state,
-        array: generateRandomArray(action.payload),
-        sortWith: undefined,
-        data: undefined,
-        state: "stop"
-      };
-  }
-}
+import { reducer, initialState } from "./state";
 
 export default function App() {
-  const [dispatch, state] = useReducer(reducer);
-  const [array, setArray] = useState<number[]>([]);
+  const [{ array, sortWith, state, data }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
   const [arrayLength, setArrayLength] = useState<number>(20);
-  const [sortWith, setSortWith] = useState<"quick" | "bubble" | undefined>();
-  const [state, setState] = useState<"stop" | "play" | "pause" | "end">("stop");
   const [delay, setDelay] = useState<number>(1);
-  const [data, setData] = useState<State>();
-  const generator = useRef<Generator<TypeOfSortState> | null>(null);
-  const currentData = { ...data, arr: data?.arr || array };
+  const generator = useRef<Generator<BubbleSortState | QuickSortState> | null>(
+    null
+  );
 
   useEffect(() => {
     let id: number;
@@ -66,9 +33,9 @@ export default function App() {
         const { value, done } = generator.current.next();
         if (done) {
           clearInterval(id);
-          return setState("end");
+          return dispatch({ type: "SET_STATE", payload: "end" });
         }
-        setData(value);
+        dispatch({ type: "SET_DATA", payload: value });
       }, delay);
     }
     return () => {
@@ -77,11 +44,8 @@ export default function App() {
   }, [sortWith, delay, state]);
 
   const onGenerateArrayClick = () => {
-    setArray(generateRandomArray(arrayLength));
-    setSortWith(undefined);
+    dispatch({ type: "GENERATE_ARRAY", payload: arrayLength });
     generator.current = null;
-    setData(undefined);
-    setState("stop");
   };
 
   const onDelayChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -92,22 +56,15 @@ export default function App() {
     setArrayLength(Number(event.target.value));
   };
 
-  const onQuickSortCLick = () => {
-    setSortWith("quick");
-    setState("stop");
-    setData(undefined);
-    generator.current = startQuickSort([...array], 0, array.length - 1);
-  };
-
-  const onBubbleSortClick = () => {
-    setSortWith("bubble");
-    setState("stop");
-    setData(undefined);
-    generator.current = startBubbleSort([...array]);
+  const onSwitchSort = (sort: "quick" | "bubble") => {
+    if (sortWith === sort) return;
+    dispatch({ type: "SET_SORT", payload: sort });
+    generator.current = null;
   };
 
   const onPlayClick = () => {
-    if (state !== "pause") {
+    if (state === "play") return;
+    if (state === "stop" || state === "end") {
       if (sortWith === "quick") {
         generator.current = startQuickSort([...array], 0, array.length - 1);
       }
@@ -115,28 +72,27 @@ export default function App() {
         generator.current = startBubbleSort([...array]);
       }
     }
-    setState("play");
+    dispatch({ type: "SET_STATE", payload: "play" });
   };
 
   const onStopClick = () => {
-    setState("stop");
-    setData(undefined);
+    dispatch({ type: "SET_STATE", payload: "stop" });
     generator.current = null;
   };
 
   const onPauseClick = () => {
-    setState("pause");
+    dispatch({ type: "SET_STATE", payload: "pause" });
   };
 
   const onNextClick = () => {
-    if (state === "pause") {
-      const { value, done } = generator.current.next();
-      if (done) {
-        return setState("end");
-      }
-      return setData(value);
+    if (state !== "pause")
+      return dispatch({ type: "SET_STATE", payload: "pause" });
+
+    const { value, done } = generator.current.next();
+    if (done) {
+      return dispatch({ type: "SET_STATE", payload: "end" });
     }
-    setState("pause");
+    return dispatch({ type: "SET_DATA", payload: value });
   };
 
   return (
@@ -145,9 +101,8 @@ export default function App() {
         <Comparisions sortWith={sortWith} comparisions={0} />
         <Menu
           onGenerateArrayClick={onGenerateArrayClick}
-          onQuickSortCLick={onQuickSortCLick}
           onDelayChange={onDelayChange}
-          onBubbleSortClick={onBubbleSortClick}
+          onSwitchSort={onSwitchSort}
           onArrayLengthChange={onArrayLengthChange}
           arrayLength={arrayLength}
           delay={delay}
@@ -160,7 +115,7 @@ export default function App() {
           onNextClick={onNextClick}
         />
       </Header>
-      <Columns data={currentData} />
+      <Columns data={{ ...data, arr: data?.arr || array }} />
     </div>
   );
 }

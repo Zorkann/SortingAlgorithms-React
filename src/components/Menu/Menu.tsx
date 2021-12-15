@@ -4,8 +4,7 @@ import MenuItem from "./MenuItem";
 
 type MenuProps = {
   onGenerateArrayClick: () => void;
-  onQuickSortCLick: () => void;
-  onBubbleSortClick: () => void;
+  onSwitchSort: (sort: "quick" | "bubble") => void;
   onDelayChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onArrayLengthChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   arrayLength: number;
@@ -15,9 +14,8 @@ type MenuProps = {
 
 const Menu = ({
   onGenerateArrayClick,
-  onQuickSortCLick,
+  onSwitchSort,
   onDelayChange,
-  onBubbleSortClick,
   onArrayLengthChange,
   arrayLength,
   delay,
@@ -55,10 +53,10 @@ const Menu = ({
 
       <div className={styles.sort}>
         <MenuItem isSelected={sortWith === "quick"}>
-          <Button onClick={onQuickSortCLick}>Quick Sort</Button>
+          <Button onClick={() => onSwitchSort("quick")}>Quick Sort</Button>
         </MenuItem>
         <MenuItem isSelected={sortWith === "bubble"}>
-          <Button onClick={onBubbleSortClick}>Bubble Sort</Button>
+          <Button onClick={() => onSwitchSort("bubble")}>Bubble Sort</Button>
         </MenuItem>
       </div>
     </div>
