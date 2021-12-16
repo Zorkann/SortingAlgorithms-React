@@ -10,7 +10,7 @@ function swap(inputArr: number[], i: number) {
   inputArr[i + 1] = tmp;
 }
 
-function* startBubbleSort(arr) {
+function* startBubbleSort(arr: number[]) {
   const arrCopy = [...arr];
   let comparisions = 0;
   let swapped = true;

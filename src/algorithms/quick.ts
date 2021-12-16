@@ -6,18 +6,6 @@ export type QuickSortState = {
   arr: number[];
 };
 
-type SetQuickSortArgs = {
-  cb: (args: QuickSortState, comparisions: number) => void;
-  arr: number[];
-};
-
-type QuickSortArgs = {
-  i: number;
-  j: number;
-  cb: (args: QuickSortState) => void;
-  arr: number[];
-};
-
 function setPivot(arr: number[], i: number, j: number) {
   let pi = Math.floor((i + j) / 2);
   let p = arr[pi];
