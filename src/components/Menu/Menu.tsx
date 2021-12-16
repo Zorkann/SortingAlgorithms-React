@@ -27,12 +27,15 @@ const Menu = ({
 
       <div className={styles.slidersContainer}>
         <div className={styles.slider}>
-          <label htmlFor="delay">Delay: {delay}</label>
+          <div className={styles.sliderLabels}>
+            <label htmlFor="delay">Slow</label>
+            <label htmlFor="delay">Fast</label>
+          </div>
           <input
             type="range"
-            min="1"
-            max="1000"
-            value={delay}
+            min="-500"
+            max="-50"
+            value={-Math.abs(delay)}
             onChange={onDelayChange}
             id="delay"
           />

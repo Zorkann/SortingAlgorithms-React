@@ -30,6 +30,11 @@
   margin: 0 10px;
 }
 
+.sliderLabels {
+  display: flex;
+  justify-content: space-between;
+}
+
 .sort {
   display: flex;
   flex-wrap: wrap;
