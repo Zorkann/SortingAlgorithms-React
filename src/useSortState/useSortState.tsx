@@ -41,6 +41,15 @@ const useSortState = ({ array, sortWith, delay = 0 }: useSortStateProps) => {
     generator.current = null;
   }, []);
 
+  const startProcess = () => {
+    if (sortWith === "quick") {
+      generator.current = startQuickSort(array);
+    }
+    if (sortWith === "bubble") {
+      generator.current = startBubbleSort(array);
+    }
+  };
+
   useEffect(() => {
     resetProcess();
   }, [array, sortWith, resetProcess]);
@@ -58,12 +67,7 @@ const useSortState = ({ array, sortWith, delay = 0 }: useSortStateProps) => {
   const onPlayClick = () => {
     if (state === "play") return;
     if (state === "stop" || state === "end") {
-      if (sortWith === "quick") {
-        generator.current = startQuickSort(array);
-      }
-      if (sortWith === "bubble") {
-        generator.current = startBubbleSort(array);
-      }
+      startProcess();
     }
     setState("play");
   };
@@ -82,12 +86,7 @@ const useSortState = ({ array, sortWith, delay = 0 }: useSortStateProps) => {
     }
 
     if (state === "stop") {
-      if (sortWith === "quick") {
-        generator.current = startQuickSort(array);
-      }
-      if (sortWith === "bubble") {
-        generator.current = startBubbleSort(array);
-      }
+      startProcess();
       setState("pause");
     }
 
