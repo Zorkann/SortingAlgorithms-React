@@ -43,7 +43,7 @@ export default function App() {
   return (
     <div className="App">
       <Header>
-        <Comparisions sortWith={sortWith} comparisions={0} />
+        <Comparisions sortWith={sortWith} comparisions={data?.comparisions} />
         <Menu
           onGenerateArrayClick={onGenerateArrayClick}
           onDelayChange={onDelayChange}

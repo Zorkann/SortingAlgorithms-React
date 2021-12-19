@@ -17,18 +17,23 @@ const useSortState = ({ array, sortWith, delay = 0 }: useSortStateProps) => {
   const generator = useRef<Generator<BubbleSortState | QuickSortState> | null>(
     null
   );
-
   const data = historyData[historyData.length - 1 + currentStep];
 
   const processStep = useCallback(() => {
     if (generator.current === null) return;
-    const { value, done } = generator.current.next();
-    if (done) {
-      return setState("end");
+    if (currentStep < 0) {
+      return setCurrentStep((step) => step + 1);
     }
-    console.log(value.comparision);
-    setHistoryData((prev) => [...prev, value]);
-  }, []);
+    const { value, done } = generator.current.next();
+
+    if (done) {
+      setState("end");
+    }
+
+    if (value) {
+      return setHistoryData((prev) => [...prev, value]);
+    }
+  }, [currentStep]);
 
   const resetProcess = useCallback(() => {
     setState("stop");
@@ -54,10 +59,10 @@ const useSortState = ({ array, sortWith, delay = 0 }: useSortStateProps) => {
     if (state === "play") return;
     if (state === "stop" || state === "end") {
       if (sortWith === "quick") {
-        generator.current = startQuickSort([...array], 0, array.length - 1);
+        generator.current = startQuickSort(array);
       }
       if (sortWith === "bubble") {
-        generator.current = startBubbleSort([...array]);
+        generator.current = startBubbleSort(array);
       }
     }
     setState("play");
@@ -78,23 +83,24 @@ const useSortState = ({ array, sortWith, delay = 0 }: useSortStateProps) => {
 
     if (state === "stop") {
       if (sortWith === "quick") {
-        generator.current = startQuickSort([...array], 0, array.length - 1);
+        generator.current = startQuickSort(array);
       }
       if (sortWith === "bubble") {
-        generator.current = startBubbleSort([...array]);
+        generator.current = startBubbleSort(array);
       }
       setState("pause");
     }
 
-    if (currentStep === 0) {
-      return processStep();
-    }
-    return setCurrentStep((step) => step + 1);
+    return processStep();
   };
 
   const onPrevClick = () => {
     if (state === "play") {
       return setState("pause");
+    }
+
+    if (state === "end") {
+      setState("pause");
     }
     return setCurrentStep((step) =>
       Math.abs(step) === historyData.length ? step : step - 1

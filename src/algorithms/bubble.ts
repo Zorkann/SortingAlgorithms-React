@@ -2,29 +2,41 @@ export type BubbleSortState = {
   i: number;
   j: number;
   arr: number[];
+  comparisions: number;
 };
 
-function swap(inputArr: number[], i: number) {
-  let tmp = inputArr[i];
-  inputArr[i] = inputArr[i + 1];
-  inputArr[i + 1] = tmp;
+function swap(arr: number[], j: number) {
+  let temp = arr[j + 1];
+  arr[j + 1] = arr[j];
+  arr[j] = temp;
 }
 
 function* startBubbleSort(arr: number[]) {
   const arrCopy = [...arr];
-  let swapped = true;
+  let comparisions = 0;
 
-  do {
-    swapped = false;
-    for (let i = 0; i < arrCopy.length; i++) {
-      yield { arr: [...arrCopy], i, j: i + 1 };
-      if (arrCopy[i] > arrCopy[i + 1]) {
-        swap(arrCopy, i);
-        yield { arr: [...arrCopy], i: i + 1, j: i };
-        swapped = true;
+  function* bubbleSort(arr: number[]): Generator<BubbleSortState> {
+    for (let i = 1; i < arrCopy.length; i++) {
+      let flag = false;
+      for (let j = 0; j < arrCopy.length - i; j++) {
+        comparisions += 1;
+        yield { arr: [...arrCopy], i: j, j: j + 1, comparisions };
+        if (arrCopy[j] > arrCopy[j + 1]) {
+          flag = true;
+          swap(arrCopy, j);
+          yield { arr: [...arrCopy], i: j + 1, j: j, comparisions };
+        }
+      }
+      if (!flag) {
+        return { arr: [...arrCopy], i: undefined, j: undefined, comparisions };
       }
     }
-  } while (swapped);
+
+    return { arr: [...arrCopy], i: undefined, j: undefined, comparisions };
+  }
+
+  const result: BubbleSortState = yield* bubbleSort(arrCopy);
+  return result;
 }
 
 export { startBubbleSort };

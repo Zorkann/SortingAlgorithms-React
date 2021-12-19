@@ -2,10 +2,10 @@ import styles from "./Comparisions.module.css";
 
 type ComparisionsProps = {
   sortWith?: "bubble" | "quick";
-  comparisions: number;
+  comparisions?: number;
 };
 
-const Comparisions = ({ sortWith, comparisions }: ComparisionsProps) => {
+const Comparisions = ({ sortWith, comparisions = 0 }: ComparisionsProps) => {
   const sortedBy = sortWith ? `${sortWith} Sort` : null;
   return (
     <div className={styles.comparisions}>
