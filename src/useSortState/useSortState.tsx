@@ -9,13 +9,16 @@ type useSortStateProps = {
 };
 
 const useSortState = ({ array, sortWith, delay = 0 }: useSortStateProps) => {
-  const [data, setData] = useState<
-    BubbleSortState | QuickSortState | undefined
-  >();
+  const [historyData, setHistoryData] = useState<
+    (BubbleSortState | QuickSortState)[]
+  >([]);
+  const [currentStep, setCurrentStep] = useState(0);
   const [state, setState] = useState<"stop" | "play" | "pause" | "end">("stop");
   const generator = useRef<Generator<BubbleSortState | QuickSortState> | null>(
     null
   );
+
+  const data = historyData[historyData.length - 1 + currentStep];
 
   const processStep = useCallback(() => {
     if (generator.current === null) return;
@@ -23,12 +26,13 @@ const useSortState = ({ array, sortWith, delay = 0 }: useSortStateProps) => {
     if (done) {
       return setState("end");
     }
-    setData(value);
+    console.log(value.comparision);
+    setHistoryData((prev) => [...prev, value]);
   }, []);
 
   const resetProcess = useCallback(() => {
     setState("stop");
-    setData(undefined);
+    setHistoryData([]);
     generator.current = null;
   }, []);
 
@@ -68,10 +72,33 @@ const useSortState = ({ array, sortWith, delay = 0 }: useSortStateProps) => {
   };
 
   const onNextClick = () => {
-    if (state !== "pause") {
+    if (state === "play") {
       return setState("pause");
     }
-    processStep();
+
+    if (state === "stop") {
+      if (sortWith === "quick") {
+        generator.current = startQuickSort([...array], 0, array.length - 1);
+      }
+      if (sortWith === "bubble") {
+        generator.current = startBubbleSort([...array]);
+      }
+      setState("pause");
+    }
+
+    if (currentStep === 0) {
+      return processStep();
+    }
+    return setCurrentStep((step) => step + 1);
+  };
+
+  const onPrevClick = () => {
+    if (state === "play") {
+      return setState("pause");
+    }
+    return setCurrentStep((step) =>
+      Math.abs(step) === historyData.length ? step : step - 1
+    );
   };
 
   return {
@@ -79,7 +106,8 @@ const useSortState = ({ array, sortWith, delay = 0 }: useSortStateProps) => {
     onPlayClick,
     onStopClick,
     onPauseClick,
-    onNextClick
+    onNextClick,
+    onPrevClick
   };
 };
 

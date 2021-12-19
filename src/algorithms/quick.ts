@@ -18,6 +18,8 @@ function swap(arr: number[], i: number, j: number) {
   arr[j] = temp;
 }
 
+// let comparision = 0;
+
 function* setCalculate(arr: number[], i: number, j: number) {
   let { p, pi } = setPivot(arr, i, j);
 
@@ -28,6 +30,7 @@ function* setCalculate(arr: number[], i: number, j: number) {
       pi = i - 1;
     }
   }
+  yield { arr: [...arr], i, j, p, pi, comparision };
 
   while (i <= j) {
     if (arr[i] < p) {
@@ -39,13 +42,19 @@ function* setCalculate(arr: number[], i: number, j: number) {
       i++;
       j--;
       swapPivot();
+      yield { arr: [...arr], i: j + 1, j: i - 1, p, pi, comparision };
     }
-    yield { arr, i, j, p, pi };
+    // comparision += 1;
+    yield { arr: [...arr], i, j, p, pi, comparision };
   }
-  return { arr, i, j, p, pi };
+  return { arr: [...arr], i, j, p, pi, comparision };
 }
 
-function* startQuickSort(arr: number[], i: number, j: number) {
+function* startQuickSort(
+  arr: number[],
+  i: number,
+  j: number
+): Generator<QuickSortState> {
   const result = yield* setCalculate(arr, i, j);
   if (i < result.i - 1) {
     yield* startQuickSort(arr, i, result.i - 1);
@@ -53,7 +62,7 @@ function* startQuickSort(arr: number[], i: number, j: number) {
   if (result.i < j) {
     yield* startQuickSort(arr, result.i, j);
   }
-  return result;
+  return { result, comparision };
 }
 
 export { startQuickSort };

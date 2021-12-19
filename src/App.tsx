@@ -20,7 +20,8 @@ export default function App() {
     onPauseClick,
     onStopClick,
     onPlayClick,
-    onNextClick
+    onNextClick,
+    onPrevClick
   } = useSortState({ array, sortWith, delay });
 
   const onGenerateArrayClick = () => {
@@ -57,6 +58,7 @@ export default function App() {
           onStopClick={onStopClick}
           onPlayClick={onPlayClick}
           onNextClick={onNextClick}
+          onPrevClick={onPrevClick}
         />
       </Header>
       <Columns data={{ ...data, arr: data?.arr || array }} />

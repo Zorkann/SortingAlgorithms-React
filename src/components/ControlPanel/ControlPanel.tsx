@@ -6,16 +6,19 @@ type ControlPanelProps = {
   onPauseClick: () => void;
   onPlayClick: () => void;
   onNextClick: () => void;
+  onPrevClick: () => void;
 };
 
 const ControlPanel = ({
   onPauseClick,
   onStopClick,
   onPlayClick,
-  onNextClick
+  onNextClick,
+  onPrevClick
 }: ControlPanelProps) => {
   return (
     <div className={styles.controlPanel}>
+      <Button onClick={onPrevClick}>{"<"}</Button>
       <Button onClick={onStopClick}>Stop</Button>
       <Button onClick={onPlayClick}>Play</Button>
       <Button onClick={onPauseClick}>Pause</Button>

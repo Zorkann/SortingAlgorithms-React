@@ -12,16 +12,15 @@ function swap(inputArr: number[], i: number) {
 
 function* startBubbleSort(arr: number[]) {
   const arrCopy = [...arr];
-  let comparisions = 0;
   let swapped = true;
 
   do {
     swapped = false;
     for (let i = 0; i < arrCopy.length; i++) {
-      yield { arr: [...arrCopy], i, j: i + 1, comparisions };
-      comparisions++;
+      yield { arr: [...arrCopy], i, j: i + 1 };
       if (arrCopy[i] > arrCopy[i + 1]) {
         swap(arrCopy, i);
+        yield { arr: [...arrCopy], i: i + 1, j: i };
         swapped = true;
       }
     }
