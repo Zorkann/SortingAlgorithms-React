@@ -1,15 +1,17 @@
 import Button from "../Button";
 import styles from "./Menu.module.css";
 import MenuItem from "./MenuItem";
+import { ChangeEvent } from "react";
+import { SortType } from "../../useSortState/useSortState";
 
 type MenuProps = {
   onGenerateArrayClick: () => void;
-  onSwitchSort: (sort: "quick" | "bubble") => void;
-  onDelayChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onArrayLengthChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onSwitchSort: (sort: SortType) => void;
+  onDelayChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onArrayLengthChange: (event: ChangeEvent<HTMLInputElement>) => void;
   arrayLength: number;
   delay: number;
-  sortWith?: "quick" | "bubble";
+  sortWith?: SortType;
 };
 
 const Menu = ({
@@ -21,6 +23,14 @@ const Menu = ({
   delay,
   sortWith
 }: MenuProps) => {
+  const onQuickSortClick = () => {
+    onSwitchSort("quick");
+  };
+
+  const onBubbleSortClick = () => {
+    onSwitchSort("bubble");
+  };
+
   return (
     <div className={styles.menu}>
       <Button onClick={onGenerateArrayClick}> Generate Array </Button>
@@ -56,10 +66,10 @@ const Menu = ({
 
       <div className={styles.sort}>
         <MenuItem isSelected={sortWith === "quick"}>
-          <Button onClick={() => onSwitchSort("quick")}>Quick Sort</Button>
+          <Button onClick={onQuickSortClick}>Quick Sort</Button>
         </MenuItem>
         <MenuItem isSelected={sortWith === "bubble"}>
-          <Button onClick={() => onSwitchSort("bubble")}>Bubble Sort</Button>
+          <Button onClick={onBubbleSortClick}>Bubble Sort</Button>
         </MenuItem>
       </div>
     </div>

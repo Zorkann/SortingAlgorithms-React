@@ -1,6 +1,6 @@
 export type BubbleSortState = {
-  i: number;
-  j: number;
+  i?: number;
+  j?: number;
   arr: number[];
   comparisions: number;
 };
@@ -15,7 +15,10 @@ function* startBubbleSort(arr: number[]) {
   const arrCopy = [...arr];
   let comparisions = 0;
 
-  function* bubbleSort(arr: number[]): Generator<BubbleSortState> {
+  function* bubbleSort(): Generator<
+    BubbleSortState,
+    BubbleSortState | undefined
+  > {
     for (let i = 1; i < arrCopy.length; i++) {
       let flag = false;
       for (let j = 0; j < arrCopy.length - i; j++) {
@@ -35,7 +38,7 @@ function* startBubbleSort(arr: number[]) {
     return { arr: [...arrCopy], i: undefined, j: undefined, comparisions };
   }
 
-  const result: BubbleSortState = yield* bubbleSort(arrCopy);
+  const result = yield* bubbleSort();
   return result;
 }
 

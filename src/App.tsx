@@ -5,16 +5,17 @@ import {
   Columns,
   Comparisions,
   Header,
-  ControlPanel
+  ControlPanel,
+  Button
 } from "./components";
-import { useSortState } from "./useSortState/useSortState";
+import { useSortState, SortType } from "./useSortState/useSortState";
 import { generateRandomArray } from "./utils";
 
 export default function App() {
   const [array, setArray] = useState<number[]>([]);
   const [arrayLength, setArrayLength] = useState<number>(20);
   const [delay, setDelay] = useState<number>(100);
-  const [sortWith, setSortWith] = useState<"quick" | "bubble" | undefined>();
+  const [sortWith, setSortWith] = useState<SortType>();
   const {
     data,
     onPauseClick,
@@ -28,7 +29,7 @@ export default function App() {
     setArray(generateRandomArray(arrayLength));
   };
 
-  const onSwitchSort = (sort: "quick" | "bubble") => {
+  const onSwitchSort = (sort: SortType) => {
     setSortWith(sort);
   };
 
@@ -53,13 +54,13 @@ export default function App() {
           delay={delay}
           sortWith={sortWith}
         />
-        <ControlPanel
-          onPauseClick={onPauseClick}
-          onStopClick={onStopClick}
-          onPlayClick={onPlayClick}
-          onNextClick={onNextClick}
-          onPrevClick={onPrevClick}
-        />
+        <ControlPanel>
+          <Button onClick={onPrevClick}>{"<"}</Button>
+          <Button onClick={onStopClick}>Stop</Button>
+          <Button onClick={onPlayClick}>Play</Button>
+          <Button onClick={onPauseClick}>Pause</Button>
+          <Button onClick={onNextClick}>{">"}</Button>
+        </ControlPanel>
       </Header>
       <Columns data={{ ...data, arr: data?.arr || array }} />
     </div>

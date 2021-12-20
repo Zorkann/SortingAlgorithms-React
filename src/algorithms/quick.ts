@@ -1,8 +1,8 @@
 export type QuickSortState = {
-  i: number;
-  j: number;
-  pi: number;
-  p: number;
+  i?: number;
+  j?: number;
+  pi?: number;
+  p?: number;
   arr: number[];
   comparisions: number;
 };
@@ -59,7 +59,7 @@ function* startQuickSort(array: number[]) {
     arr: number[],
     i: number,
     j: number
-  ): Generator<QuickSortState> {
+  ): Generator<QuickSortState, QuickSortState | undefined> {
     const result = yield* setCalculate(arr, i, j);
     if (i < result.i - 1) {
       yield* quickSort(arr, i, result.i - 1);
@@ -77,7 +77,7 @@ function* startQuickSort(array: number[]) {
     };
   }
 
-  const result: QuickSortState = yield* quickSort(arrCopy, 0, array.length - 1);
+  const result = yield* quickSort(arrCopy, 0, array.length - 1);
   return result;
 }
 

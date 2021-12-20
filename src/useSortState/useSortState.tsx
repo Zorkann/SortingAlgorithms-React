@@ -2,28 +2,37 @@ import { useRef, useCallback, useEffect, useState } from "react";
 import { startBubbleSort, BubbleSortState } from "../algorithms/bubble";
 import { startQuickSort, QuickSortState } from "../algorithms/quick";
 
+export type SortType = "quick" | "bubble" | undefined;
+type State = "stop" | "play" | "pause" | "end";
+type SortState = BubbleSortState | QuickSortState;
+type GeneratorType = Generator<SortState, SortState | undefined>;
+
 type useSortStateProps = {
   array: number[];
-  sortWith: "quick" | "bubble" | undefined;
+  sortWith: SortType;
   delay?: number;
 };
 
+const initGenerator = (array: number[], sortWith: SortType) => {
+  if (sortWith === "quick") {
+    return startQuickSort(array);
+  }
+  if (sortWith === "bubble") {
+    return startBubbleSort(array);
+  }
+
+  return null;
+};
+
 const useSortState = ({ array, sortWith, delay = 0 }: useSortStateProps) => {
-  const [historyData, setHistoryData] = useState<
-    (BubbleSortState | QuickSortState)[]
-  >([]);
+  const [sortingSteps, setSortingSteps] = useState<SortState[]>([]);
   const [currentStep, setCurrentStep] = useState(0);
-  const [state, setState] = useState<"stop" | "play" | "pause" | "end">("stop");
-  const generator = useRef<Generator<BubbleSortState | QuickSortState> | null>(
-    null
-  );
-  const data = historyData[historyData.length - 1 + currentStep];
+  const [state, setState] = useState<State>("stop");
+  const generator = useRef<GeneratorType | null>(null);
+  const data = sortingSteps[sortingSteps.length - 1 + currentStep];
 
   const processStep = useCallback(() => {
     if (generator.current === null) return;
-    if (currentStep < 0) {
-      return setCurrentStep((step) => step + 1);
-    }
     const { value, done } = generator.current.next();
 
     if (done) {
@@ -31,24 +40,33 @@ const useSortState = ({ array, sortWith, delay = 0 }: useSortStateProps) => {
     }
 
     if (value) {
-      return setHistoryData((prev) => [...prev, value]);
+      return setSortingSteps((steps) => [...steps, value]);
     }
-  }, [currentStep]);
+  }, []);
 
   const resetProcess = useCallback(() => {
     setState("stop");
-    setHistoryData([]);
+    setSortingSteps([]);
     generator.current = null;
   }, []);
 
   const startProcess = () => {
-    if (sortWith === "quick") {
-      generator.current = startQuickSort(array);
-    }
-    if (sortWith === "bubble") {
-      generator.current = startBubbleSort(array);
-    }
+    generator.current = initGenerator(array, sortWith);
   };
+
+  const prevStep = () => {
+    return setCurrentStep((step) =>
+      Math.abs(step) === sortingSteps.length ? step : step - 1
+    );
+  };
+
+  const nextStep = useCallback(() => {
+    if (currentStep < 0) {
+      return setCurrentStep((step) => step + 1);
+    }
+
+    return processStep();
+  }, [currentStep, processStep]);
 
   useEffect(() => {
     resetProcess();
@@ -57,12 +75,12 @@ const useSortState = ({ array, sortWith, delay = 0 }: useSortStateProps) => {
   useEffect(() => {
     let id: number;
     if (state === "play") {
-      id = setInterval(processStep, delay);
+      id = setInterval(nextStep, delay);
     }
     return () => {
       clearInterval(id);
     };
-  }, [sortWith, delay, state, processStep]);
+  }, [sortWith, delay, state, nextStep]);
 
   const onPlayClick = () => {
     if (state === "play") return;
@@ -85,12 +103,14 @@ const useSortState = ({ array, sortWith, delay = 0 }: useSortStateProps) => {
       return setState("pause");
     }
 
+    if (state === "end") return;
+
     if (state === "stop") {
       startProcess();
       setState("pause");
     }
 
-    return processStep();
+    return nextStep();
   };
 
   const onPrevClick = () => {
@@ -98,12 +118,12 @@ const useSortState = ({ array, sortWith, delay = 0 }: useSortStateProps) => {
       return setState("pause");
     }
 
+    if (state === "stop") return;
+
     if (state === "end") {
       setState("pause");
     }
-    return setCurrentStep((step) =>
-      Math.abs(step) === historyData.length ? step : step - 1
-    );
+    return prevStep();
   };
 
   return {
