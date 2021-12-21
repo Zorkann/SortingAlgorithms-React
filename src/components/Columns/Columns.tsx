@@ -34,7 +34,7 @@ const Columns = ({ data }: ColumnProps) => {
             [styles.j]: index === j
           })}
           key={element}
-          style={{ height: `calc(${((element + 4) * 95) / maxValue}%)` }}
+          style={{ height: `calc(${((element + 10) * 87) / maxValue}%)` }}
           value={element}
         >
           <div>{element}</div>

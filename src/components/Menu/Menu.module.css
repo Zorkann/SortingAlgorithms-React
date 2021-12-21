@@ -1,19 +1,23 @@
 @import "../../vars.css";
 
 .menu {
-  display: flex;
-  flex-flow: row wrap;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-gap: 20px;
+  align-items: start;
 }
 
 .sliders {
-  display: flex;
-  gap: 20px;
+  grid-column: span 2;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-gap: 20px;
 }
 
 .slider {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .sliderLabels {
@@ -22,6 +26,8 @@
 }
 
 .sort {
-  display: flex;
-  gap: 20px;
+  grid-column: span 2;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-gap: 20px;
 }

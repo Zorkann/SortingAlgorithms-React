@@ -33,10 +33,7 @@ const Menu = ({
 
   return (
     <div className={styles.menu}>
-      <div className={styles.button}>
-        <Button onClick={onGenerateArrayClick}> Generate Array </Button>
-      </div>
-
+      <Button onClick={onGenerateArrayClick}> Generate Array </Button>
       <div className={styles.sliders}>
         <div className={styles.slider}>
           <div className={styles.sliderLabels}>
@@ -67,26 +64,13 @@ const Menu = ({
       </div>
 
       <div className={styles.sort}>
-        <div className={styles.menuItem}>
-          <MenuItem isSelected={sortWith === "quick"}>
-            <Button onClick={onQuickSortClick}>Quick Sort</Button>
-          </MenuItem>
-        </div>
-        <div className={styles.menuItem}>
-          <MenuItem isSelected={sortWith === "bubble"}>
-            <Button onClick={onBubbleSortClick}>Bubble Sort</Button>
-          </MenuItem>
-        </div>
-        <div className={styles.menuItem}>
-          <MenuItem isSelected={sortWith === "bubble"}>
-            <Button onClick={onBubbleSortClick}>Bubble Sort</Button>
-          </MenuItem>
-        </div>
-        <div className={styles.menuItem}>
-          <MenuItem isSelected={sortWith === "bubble"}>
-            <Button onClick={onBubbleSortClick}>Bubble Sort</Button>
-          </MenuItem>
-        </div>
+        <MenuItem isSelected={sortWith === "quick"}>
+          <Button onClick={onQuickSortClick}>Quick Sort</Button>
+        </MenuItem>
+
+        <MenuItem isSelected={sortWith === "bubble"}>
+          <Button onClick={onBubbleSortClick}>Bubble Sort</Button>
+        </MenuItem>
       </div>
     </div>
   );

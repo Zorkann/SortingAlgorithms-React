@@ -11,6 +11,7 @@ const MenuItem = ({ isSelected, children }: MenuItemProps) => {
   return (
     <div
       className={classNames({
+        [styles.menuItem]: true,
         [styles.selected]: isSelected
       })}
     >
