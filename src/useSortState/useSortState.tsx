@@ -95,6 +95,7 @@ const useSortState = ({ array, sortWith, delay = 0 }: useSortStateProps) => {
   };
 
   const onPauseClick = () => {
+    if (state === "stop" || state === "end") return;
     setState("pause");
   };
 
