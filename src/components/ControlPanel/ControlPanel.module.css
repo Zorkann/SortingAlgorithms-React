@@ -1,6 +1,14 @@
 @import "../../vars.css";
 
 .controlPanel {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-row: 3/4;
+  grid-column: span 12;
+}
+
+@media only screen and (max-width: 600px) {
+  .controlPanel {
+    grid-column: span 4;
+  }
 }

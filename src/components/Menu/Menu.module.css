@@ -1,42 +1,34 @@
 @import "../../vars.css";
 
 .menu {
-  display: flex;
-  align-items: flex-start;
-  padding-bottom: var(--header-paddings);
+  grid-column: span 12;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-gap: 20px;
 }
 
-.menu > button:first-child {
-  margin-right: 10px;
-  white-space: nowrap;
-}
-
-@media only screen and (max-width: 800px) {
-  .slidersContainer {
-    display: flex;
-    flex-wrap: wrap;
-  }
-}
-
-.slidersContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.slider {
-  display: flex;
-  flex-direction: column;
-  margin: 0 10px;
-}
-
-.sliderLabels {
-  display: flex;
-  justify-content: space-between;
+.sliders {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 20px;
 }
 
 .sort {
-  display: flex;
-  flex-wrap: wrap;
-  margin-left: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, min-content);
+  grid-gap: 20px;
+}
+
+@media only screen and (max-width: 600px) {
+  .menu {
+    grid-column: span 4;
+    /* grid-template-columns: repeat(4, 1fr); */
+  }
+
+  .sliders {
+    grid-row: 2/3;
+  }
+  .sort {
+    grid-row: 3/4;
+  }
 }

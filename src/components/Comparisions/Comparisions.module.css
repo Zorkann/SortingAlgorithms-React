@@ -1,14 +1,20 @@
 @import "../../vars.css";
 
 .comparisions {
-  display: flex;
-  align-items: center;
+  grid-column: span 12;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
   text-transform: capitalize;
   font-size: 26px;
-  padding-bottom: var(--header-paddings);
 }
 
-.comparisions > span:nth-child(2) {
-  display: block;
-  margin: 0 auto;
+.comparisions > span {
+  grid-column: span 6;
+}
+
+@media only screen and (max-width: 600px) {
+  .comparisions {
+    grid-column: span 4;
+    grid-template-columns: repeat(12, auto);
+  }
 }
