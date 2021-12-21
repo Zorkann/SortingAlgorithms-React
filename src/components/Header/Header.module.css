@@ -1,18 +1,10 @@
 @import "../../vars.css";
 
 .header {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: repeat(3, min-content);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   padding: var(--header-paddings);
   border-bottom: 1px solid var(--primary-border-color);
   box-shadow: var(--primary-box-shadow-color) 0px 1px 10px;
-  margin-bottom: 20px;
-  grid-gap: 20px;
-}
-
-@media only screen and (max-width: 600px) {
-  .header {
-    grid-template-columns: repeat(4, 1fr);
-  }
 }

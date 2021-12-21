@@ -1,12 +1,17 @@
 @import "../../vars.css";
 
 .comparisions {
-  grid-column: span 12;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  display: flex;
+  flex-flow: row wrap;
   text-transform: capitalize;
   font-size: 26px;
+  gap: 20px;
 }
 
-@media only screen and (max-width: 600px) {
+.comparisions > span:first-child {
+  flex-grow: 3;
+}
+
+.comparisions > span:nth-child(2) {
+  flex-grow: 1;
 }

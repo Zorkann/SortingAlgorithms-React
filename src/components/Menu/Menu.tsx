@@ -38,7 +38,7 @@ const Menu = ({
       </div>
 
       <div className={styles.sliders}>
-        <div className={styles.slider1}>
+        <div className={styles.slider}>
           <div className={styles.sliderLabels}>
             <label htmlFor="delay">Slow</label>
             <label htmlFor="delay">Fast</label>
@@ -53,7 +53,7 @@ const Menu = ({
           />
         </div>
 
-        <div className={styles.slider2}>
+        <div className={styles.slider}>
           <label htmlFor="length">Array Length: {arrayLength}</label>
           <input
             type="range"
@@ -70,6 +70,16 @@ const Menu = ({
         <div className={styles.menuItem}>
           <MenuItem isSelected={sortWith === "quick"}>
             <Button onClick={onQuickSortClick}>Quick Sort</Button>
+          </MenuItem>
+        </div>
+        <div className={styles.menuItem}>
+          <MenuItem isSelected={sortWith === "bubble"}>
+            <Button onClick={onBubbleSortClick}>Bubble Sort</Button>
+          </MenuItem>
+        </div>
+        <div className={styles.menuItem}>
+          <MenuItem isSelected={sortWith === "bubble"}>
+            <Button onClick={onBubbleSortClick}>Bubble Sort</Button>
           </MenuItem>
         </div>
         <div className={styles.menuItem}>

@@ -1,34 +1,27 @@
 @import "../../vars.css";
 
 .menu {
-  grid-column: span 12;
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-gap: 20px;
+  display: flex;
+  flex-flow: row wrap;
+  gap: 20px;
 }
 
 .sliders {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 20px;
+  display: flex;
+  gap: 20px;
+}
+
+.slider {
+  display: flex;
+  flex-direction: column;
+}
+
+.sliderLabels {
+  display: flex;
+  justify-content: space-between;
 }
 
 .sort {
-  display: grid;
-  grid-template-columns: repeat(2, min-content);
-  grid-gap: 20px;
-}
-
-@media only screen and (max-width: 600px) {
-  .menu {
-    grid-column: span 4;
-    /* grid-template-columns: repeat(4, 1fr); */
-  }
-
-  .sliders {
-    grid-row: 2/3;
-  }
-  .sort {
-    grid-row: 3/4;
-  }
+  display: flex;
+  gap: 20px;
 }
