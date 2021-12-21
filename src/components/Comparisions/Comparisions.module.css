@@ -3,18 +3,10 @@
 .comparisions {
   grid-column: span 12;
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   text-transform: capitalize;
   font-size: 26px;
 }
 
-.comparisions > span {
-  grid-column: span 6;
-}
-
 @media only screen and (max-width: 600px) {
-  .comparisions {
-    grid-column: span 4;
-    grid-template-columns: repeat(12, auto);
-  }
 }
