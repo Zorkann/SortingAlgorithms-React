@@ -1,5 +1,7 @@
+@import "../../../vars.css";
+
 .selected > button {
-  background-color: rgba(23, 121, 255, 0.8);
+  background-color: var(--primary-button-color--hover);
 }
 
 .menuItem > button {

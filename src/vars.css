@@ -1,16 +1,45 @@
-:root {
-  --primary-color: rgb(25, 71, 255);
+:root[data-theme="light"] {
+  --text-color: black;
+  --primary-color: rgb(196, 193, 182);
   --columns-color: rgb(128, 128, 128);
+  --background-color: white;
+  --columns-border-color: black;
 
-  --i-color: var(--primary-color);
+  --i-color: rgb(25, 71, 255);
   --j-color: rgb(25, 200, 48);
   --p-color: rgb(255, 25, 25);
 
   --j-shadow-color: rgb(23, 250, 48);
   --p-shadow-color: rgb(253, 75, 25);
 
-  --primary-border-color: var(--primary-color);
+  --primary-border-color: rgb(196, 193, 182);
+  --primary-button-color--hover: rgba(196, 193, 182, 0.8);
+  --primary-box-shadow-color: rgb(196, 193, 182);
+
+  --header-paddings: 20px;
+}
+
+:root[data-theme="dark"] {
+  --text-color: white;
+  --primary-color: rgb(25, 71, 255);
+  --columns-color: rgb(128, 128, 128);
+  --background-color: radial-gradient(
+    ellipse at bottom,
+    #1b2735 0,
+    #090a0f 100%
+  );
+  --columns-border-color: black;
+
+  --i-color: rgb(25, 71, 255);
+  --j-color: rgb(25, 200, 48);
+  --p-color: rgb(255, 25, 25);
+
+  --j-shadow-color: rgb(23, 250, 48);
+  --p-shadow-color: rgb(253, 75, 25);
+
+  --primary-border-color: rgb(25, 71, 255);
   --primary-button-color--hover: rgba(23, 121, 255, 0.8);
   --primary-box-shadow-color: rgb(23 121 255);
+
   --header-paddings: 20px;
 }

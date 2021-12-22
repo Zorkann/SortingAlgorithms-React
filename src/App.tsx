@@ -1,5 +1,6 @@
 import { useState, ChangeEvent } from "react";
 import "./styles.css";
+import "./vars.css";
 import {
   Menu,
   Columns,
